@@ -39,8 +39,14 @@ namespace HW4_3
             this.gamma = gamma;
         }
 
-        public abstract double Area();
-        public abstract double Perimetr();
+        public virtual double Area()
+        {
+            return a * b * Math.Sin(Gamma) / 2;
+        }
+        public virtual double Perimetr()
+        {
+            return a + b + Math.Sqrt(a * a + b * b + a * b * Math.Cos(Gamma));
+        }
 
         public string Info()
         {
