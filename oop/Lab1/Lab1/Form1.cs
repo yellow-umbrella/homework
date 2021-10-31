@@ -259,6 +259,7 @@ namespace Lab1
                         for (int j = 0; j < _rows; j++)
                         {
                             cellName = createCellName(i, j);
+                            _dictionary.Add(cellName, new MyCell(cellName, j, i));
                             _dictionary[cellName].Exp = streamReader.ReadLine();
                         }
                     }
