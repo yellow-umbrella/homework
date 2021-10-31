@@ -42,8 +42,8 @@ namespace Lab1
 
         public override double VisitExponentialExpr([NotNull] LabCalculatorParser.ExponentialExprContext context)
         {
-            var left = WalkLeft(context);
             var right = WalkRight(context);
+            var left = WalkLeft(context);
 
             Debug.WriteLine("{0}^{1}", left, right);
             return System.Math.Pow(left, right);
