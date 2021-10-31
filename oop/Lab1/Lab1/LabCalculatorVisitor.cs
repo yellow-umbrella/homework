@@ -10,7 +10,12 @@ namespace Lab1
 {
     class LabCalculatorVisitor : LabCalculatorBaseVisitor<double>
     {
-        Dictionary<string, double> tableIdentifier = new Dictionary<string, double>();
+        public LabCalculatorVisitor(Form1 form)
+        {
+            this.form = form;
+        }
+
+        Form1 form;
 
         public override double VisitCompileUnit([NotNull] LabCalculatorParser.CompileUnitContext context)
         {
@@ -27,16 +32,7 @@ namespace Lab1
 
         public override double VisitIdentifierExpr([NotNull] LabCalculatorParser.IdentifierExprContext context)
         {
-            var result = context.GetText();
-            double value;
-            if (tableIdentifier.TryGetValue(result.ToString(), out value))
-            {
-                return value;
-            }
-            else
-            {
-                return 0.0;
-            }
+            return form.CalculateCell(context.GetText());
         }
 
         public override double VisitParenthesizedExpr([NotNull] LabCalculatorParser.ParenthesizedExprContext context)
@@ -52,6 +48,8 @@ namespace Lab1
             Debug.WriteLine("{0}^{1}", left, right);
             return System.Math.Pow(left, right);
         }
+
+        
 
         private double WalkLeft(LabCalculatorParser.ExpressionContext context)
         {
@@ -125,6 +123,6 @@ namespace Lab1
                 Debug.WriteLine("dec({0})", expression);
                 return expression - 1;
             }
-        } 
+        }
     }
 }

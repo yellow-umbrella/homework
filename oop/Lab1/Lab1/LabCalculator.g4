@@ -14,7 +14,7 @@ expression :
 	;
 
 NUMBER : INT (',' INT)?;
-IDENTIFIER : [a-zA-Z]+[1-9][0-9]+;
+IDENTIFIER : ('A'..'Z')+ ('0'..'9')+;
 
 INT : ('0'..'9')+;
 
@@ -28,4 +28,4 @@ RPAREN : ')';
 INC : 'inc';
 DEC : 'dec';
 
-WS : [\t\r\n' ']->channel(HIDDEN);
+WS : [\t\r\n ]->channel(HIDDEN);

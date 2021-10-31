@@ -12,12 +12,12 @@ namespace Lab1
     {
         public override void SyntaxError([NotNull] IRecognizer recognizer, [Nullable] IToken offendingSymbol, int line, int charPositionInLine, [NotNull] string msg, [Nullable] RecognitionException e)
         {
-            throw new ArgumentException(msg, e);
+            throw new Exception(msg, e);
         }
 
         public void SyntaxError([NotNull] IRecognizer recognizer, int offendingSymbol, int line, int charPositionInLine, [NotNull] string msg, [Nullable] RecognitionException e)
         {
-            throw new ArgumentException(msg, e);
+            throw new Exception(msg, e);
         }
     }
 }
