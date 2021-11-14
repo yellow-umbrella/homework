@@ -11,14 +11,36 @@ namespace Lab1
     {
         public MyCell() { }
 
-        public MyCell(string name, int row, int column)
+        public MyCell(int row, int column)
         {
-            this.name = name;
+            this.name = CreateCellName(column, row);
             this.row = row;
             col = column;
             val = 0;
             exp = "";
         }
+
+        public static string CreateColumnName(int i)
+        {
+            string name = "";
+            const int codeA = 65;
+            if (i < maxLetter)
+            {
+                char c = (char)(codeA + i);
+                return name + c;
+            }
+            name += (char)(i / maxLetter + codeA - 1);
+            name += (char)(i % maxLetter + codeA);
+
+            return name;
+        }
+
+        public static string CreateCellName(int col, int row)
+        {
+            return CreateColumnName(col) + row.ToString();
+        }
+
+        const int maxLetter = 26;
 
         private string name;
         public string Name { get => name; set => name = value; }

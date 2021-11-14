@@ -7,8 +7,8 @@ expression :
 	| LPAREN expression RPAREN #ParenthesizedExpr
 	| <assoc=right> expression EXPONENT expression #ExponentialExpr
 	| expression operatorToken=(MULTIPLY|DIVIDE) expression #MultiplicativeExpr
-	| operatorToken=(ADD|SUBTRACT) expression #UnAdditiveExpr
-	| expression operatorToken=(ADD|SUBTRACT) expression #BinAdditiveExpr
+	| operatorToken=(ADD|SUBTRACT) expression #UnaryAdditiveExpr
+	| expression operatorToken=(ADD|SUBTRACT) expression #BinaryAdditiveExpr
 	| NUMBER #NumberExpr
 	| IDENTIFIER #IdentifierExpr
 	;

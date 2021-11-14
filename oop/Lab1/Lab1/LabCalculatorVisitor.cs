@@ -10,12 +10,12 @@ namespace Lab1
 {
     class LabCalculatorVisitor : LabCalculatorBaseVisitor<double>
     {
-        public LabCalculatorVisitor(Form1 form)
+        public LabCalculatorVisitor(Spreadsheet spreadsheet)
         {
-            this.form = form;
+            this.spreadsheet = spreadsheet;
         }
 
-        Form1 form;
+        Spreadsheet spreadsheet;
 
         public override double VisitCompileUnit([NotNull] LabCalculatorParser.CompileUnitContext context)
         {
@@ -25,14 +25,12 @@ namespace Lab1
         public override double VisitNumberExpr([NotNull] LabCalculatorParser.NumberExprContext context)
         {
             var result = double.Parse(context.GetText());
-            Debug.WriteLine(result);
-
             return result;
         }
 
         public override double VisitIdentifierExpr([NotNull] LabCalculatorParser.IdentifierExprContext context)
         {
-            return form.CalculateCell(context.GetText());
+            return spreadsheet.CalculateCell(context.GetText());
         }
 
         public override double VisitParenthesizedExpr([NotNull] LabCalculatorParser.ParenthesizedExprContext context)
@@ -44,53 +42,31 @@ namespace Lab1
         {
             var right = WalkRight(context);
             var left = WalkLeft(context);
-
-            Debug.WriteLine("{0}^{1}", left, right);
             return System.Math.Pow(left, right);
         }
 
-        
-
-        private double WalkLeft(LabCalculatorParser.ExpressionContext context)
-        {
-            return Visit(context.GetRuleContext<LabCalculatorParser.ExpressionContext>(0));
-        }
-
-        private double WalkRight(LabCalculatorParser.ExpressionContext context)
-        {
-            return Visit(context.GetRuleContext<LabCalculatorParser.ExpressionContext>(1));
-        }
-
-        public override double VisitBinAdditiveExpr([NotNull] LabCalculatorParser.BinAdditiveExprContext context)
+        public override double VisitBinaryAdditiveExpr([NotNull] LabCalculatorParser.BinaryAdditiveExprContext context)
         {
             var left = WalkLeft(context);
             var right = WalkRight(context);
 
             if (context.operatorToken.Type == LabCalculatorLexer.ADD)
             {
-                Debug.WriteLine("{0} + {1}", left, right);
                 return left + right;
             }
-            else
-            {
-                Debug.WriteLine("{0} - {1}", left, right);
-                return left - right;
-            }
+        
+            return left - right;
         }
 
-        public override double VisitUnAdditiveExpr([NotNull] LabCalculatorParser.UnAdditiveExprContext context)
+        public override double VisitUnaryAdditiveExpr([NotNull] LabCalculatorParser.UnaryAdditiveExprContext context)
         {
             var expression = Visit(context.expression());
             if (context.operatorToken.Type == LabCalculatorLexer.ADD)
             {
-                Debug.WriteLine("+{0}", expression);
                 return expression;
             }
-            else
-            {
-                Debug.WriteLine("-{0}", expression);
-                return -expression;
-            }
+
+            return -expression;
         }
 
         public override double VisitMultiplicativeExpr([NotNull] LabCalculatorParser.MultiplicativeExprContext context)
@@ -100,14 +76,9 @@ namespace Lab1
 
             if (context.operatorToken.Type == LabCalculatorLexer.MULTIPLY)
             {
-                Debug.WriteLine("{0} * {1}", left, right);
                 return left * right;
             }
-            else
-            {
-                Debug.WriteLine("{0} / {1}", left, right);
-                return left / right;
-            }
+            return left / right;
         }
 
         public override double VisitIncrementalExpr([NotNull] LabCalculatorParser.IncrementalExprContext context)
@@ -115,14 +86,19 @@ namespace Lab1
             var expression = Visit(context.expression());
             if (context.operatorToken.Type == LabCalculatorLexer.INC)
             {
-                Debug.WriteLine("inc({0})", expression);
                 return expression + 1;
             }
-            else
-            {
-                Debug.WriteLine("dec({0})", expression);
-                return expression - 1;
-            }
+            return expression - 1;
+        }
+
+        private double WalkLeft(LabCalculatorParser.ExpressionContext context)
+        {
+            return Visit(context.GetRuleContext<LabCalculatorParser.ExpressionContext>(0));
+        }
+
+        private double WalkRight(LabCalculatorParser.ExpressionContext context)
+        {
+            return Visit(context.GetRuleContext<LabCalculatorParser.ExpressionContext>(1));
         }
     }
 }
