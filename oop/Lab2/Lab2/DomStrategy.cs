@@ -10,42 +10,75 @@ namespace Lab2
     class DomStrategy : IStrategy
     {
         XmlDocument xmlDoc;
-        public DomStrategy()
+        public DomStrategy(string file)
         {
             xmlDoc = new XmlDocument();
-            xmlDoc.Load("XmlDocument.xml");
-        }
-        private void parsingXmlDocument()
-        {
-            RecurseNodes(xmlDoc.DocumentElement);
+            xmlDoc.Load(file);
         }
 
-        private string RecurseNodes(XmlNode node)
+        private void RecurseNodes(XmlNode node, StringBuilder sb, Dictionary<string, string> format)
         {
+            foreach (XmlAttribute attr in node.Attributes)
+            {
+                sb.AppendFormat("{0}{1} ", format[attr.Name], attr.Value);
+                sb.AppendLine();
+            }
+            foreach (XmlNode n in node.ChildNodes)
+            {
+                RecurseNodes(n, sb, format);
+            }
+        }
+
+        public string Find(List<string> attributes, Dictionary<string, string> format, HashSet<string> usedNodes)
+        {
+            string query = createQuery(attributes);
+            var nodes = xmlDoc.SelectNodes(query);
             var sb = new StringBuilder();
-            RecurseNodes(node, 0, sb);
+            foreach (XmlNode node in nodes)
+            {
+                var _node = node;
+                while (_node.Name != "Class")
+                {
+                    _node = _node.ParentNode;
+                }
+                if (!usedNodes.Contains(_node.Attributes[0].Value))
+                {
+                    RecurseNodes(_node, sb, format);
+                    usedNodes.Add(_node.Attributes[0].Value);
+                }
+            }
             return sb.ToString();
         }
 
-        private void RecurseNodes(XmlNode node, int level, StringBuilder sb)
+        public HashSet<string> getAttr(string attribute)
         {
-            sb.AppendFormat("{0,-2} Type:{1,-9} Name:{2,-13} Attr:",
-                            level, node.NodeType, node.Name);
-            foreach (XmlAttribute attr in node.Attributes)
+            HashSet<string> res = new HashSet<string>();
+            var attributes = xmlDoc.SelectNodes("//@" + attribute);
+            foreach (XmlAttribute attr in attributes)
             {
-                sb.AppendFormat("{0}={1} ", attr.Name, attr.Value);
+                res.Add(attr.Value);   
             }
-            sb.AppendLine();
-            foreach (XmlNode n in node.ChildNodes)
-            {
-                RecurseNodes(n, level + 1, sb);
-            }
+            return res;
         }
 
-        public string Find(string query)
+        private string createQuery(List<string> attributes)
         {
-            var node = xmlDoc.SelectSingleNode(query);
-            return RecurseNodes(node);
+            StringBuilder sb = new StringBuilder();
+            List<string> _attributes = new List<string>();
+            foreach (string attr in attributes)
+            {
+                if (attr != "")
+                {
+                    _attributes.Add("=\"" + attr + "\"");
+                } 
+                else
+                {
+                    _attributes.Add(attr);
+                }
+            }
+            sb.AppendFormat("//Class[@ClassName{0}][@SeatsNum{1}]/Day[@DayName{2}]/Pair[@PairNum{3}][@Professor{4}]",
+                _attributes[0], _attributes[1], _attributes[2], _attributes[3], _attributes[4]);
+            return sb.ToString();
         }
     }
 }

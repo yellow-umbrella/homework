@@ -8,6 +8,6 @@ namespace Lab2
 {
     public interface IStrategy
     {
-        public string Find(string query);
+        public string Find(List<string> attributes, Dictionary<string, string> format, HashSet<string> usedNodes);
     }
 }

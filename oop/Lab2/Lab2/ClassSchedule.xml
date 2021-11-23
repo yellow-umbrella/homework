@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<Class ClassName="203" SeatsNum="10">
+		<Day DayName="понеділок">
+			<Pair PairNum="1" Professor ="Вася"/>
+			<Pair PairNum="3" Professor ="Вася"/>
+		</Day>
+		<Day DayName="вівторок">
+			<Pair PairNum="1" Professor ="Костя"/>
+			<Pair PairNum="2" Professor ="Вася"/>
+		</Day>
+	</Class>
+	<Class ClassName="202" SeatsNum="12">
+		<Day DayName="понеділок">
+			<Pair PairNum="1" Professor ="Вася"/>
+			<Pair PairNum="3" Professor ="Вася"/>
+		</Day>
+		<Day DayName="вівторок">
+			<Pair PairNum="1" Professor ="Костя"/>
+			<Pair PairNum="2" Professor ="Вася"/>
+		</Day>
+	</Class>
+</root> 
