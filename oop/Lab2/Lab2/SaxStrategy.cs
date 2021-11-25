@@ -22,12 +22,15 @@ namespace Lab2
             var sb = new StringBuilder();
             var node = new StringBuilder();
             var attr = createQuery(attributes);
-            string id = "";
+            var ind = makeInd();
             bool check = false;
+            string id = "";
+            bool[] isCorrect = new bool[attr.Count];
             var xmlReader = new XmlTextReader(file);
+
             while (xmlReader.Read())
             {
-                if (xmlReader.Name == "Class")
+                if (xmlReader.NodeType == XmlNodeType.EndElement && xmlReader.Name == "Class")
                 {
                     if (check)
                     {
@@ -35,7 +38,8 @@ namespace Lab2
                         usedNodes.Add(id);
                     }
                     node = new StringBuilder();
-                    check = true;
+                    check = false;
+                    isCorrect = new bool[attr.Count];
                 }
 
                 if (xmlReader.HasAttributes)
@@ -49,14 +53,26 @@ namespace Lab2
                                 id = xmlReader.Value;
                             }
                             node.AppendFormat("{0}{1}", format[xmlReader.Name], xmlReader.Value);
-                            if (attr[xmlReader.Name] != "" && attr[xmlReader.Name] != xmlReader.Value)
+                            int index = ind[xmlReader.Name];
+                            if ((attr[xmlReader.Name] == "" || attr[xmlReader.Name] == xmlReader.Value) 
+                                && (index == 0 || isCorrect[index - 1]))
                             {
-                                check = false;
+                                isCorrect[index] = true;
                             }
-                            node.AppendLine();
+                            else
+                            {
+                                isCorrect[index] = false;
+                            }
+                            node.AppendLine();   
                         }
                     }
                 }
+
+                if (isCorrect[attr.Count - 1])
+                {
+                    check = true;
+                }
+
             }
             xmlReader.Close();
             return sb.ToString();
@@ -71,6 +87,18 @@ namespace Lab2
                 {"DayName", attributes[2] },
                 {"PairNum", attributes[3] },
                 {"Professor", attributes[4] }
+            };
+        }
+
+        private Dictionary<string, int> makeInd()
+        {
+            return new Dictionary<string, int>()
+            {
+                {"ClassName", 0 },
+                {"SeatsNum", 1 },
+                {"DayName", 2 },
+                {"PairNum", 3 },
+                {"Professor", 4 }
             };
         }
     }

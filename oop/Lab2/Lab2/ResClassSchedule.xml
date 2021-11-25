@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <Class ClassName="200" SeatsNum="10">
+    <Day DayName="понеділок">
+      <Pair PairNum="1" Professor="Поліщук Н.В." />
+      <Pair PairNum="2" Professor="Ткаченко О.М." />
+    </Day>
+    <Day DayName="вівторок">
+      <Pair PairNum="1" Professor="Омельчук Л.Л." />
+      <Pair PairNum="3" Professor="Бєлова А.С." />
+    </Day>
+    <Day DayName="середа">
+      <Pair PairNum="1" Professor="Махно М.Ф." />
+      <Pair PairNum="2" Professor="Шевчук Ю.М." />
+      <Pair PairNum="3" Professor="Шевчук Ю.М." />
+    </Day>
+  </Class>
+</root>

@@ -1,23 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<Class ClassName="203" SeatsNum="10">
+	<Class ClassName="200" SeatsNum="10">
 		<Day DayName="понеділок">
-			<Pair PairNum="1" Professor ="Вася"/>
-			<Pair PairNum="3" Professor ="Вася"/>
+			<Pair PairNum="1" Professor ="Поліщук Н.В."/>
+			<Pair PairNum="2" Professor ="Ткаченко О.М."/>
 		</Day>
 		<Day DayName="вівторок">
-			<Pair PairNum="1" Professor ="Костя"/>
-			<Pair PairNum="2" Professor ="Вася"/>
+			<Pair PairNum="1" Professor ="Омельчук Л.Л."/>
+			<Pair PairNum="3" Professor ="Бєлова А.С."/>
+		</Day>
+		<Day DayName="середа">
+			<Pair PairNum="1" Professor ="Махно М.Ф."/>
+			<Pair PairNum="2" Professor ="Шевчук Ю.М."/>
+			<Pair PairNum="3" Professor ="Шевчук Ю.М."/>
 		</Day>
 	</Class>
-	<Class ClassName="202" SeatsNum="12">
-		<Day DayName="понеділок">
-			<Pair PairNum="1" Professor ="Вася"/>
-			<Pair PairNum="3" Professor ="Вася"/>
+	<Class ClassName="201" SeatsNum="12">
+		<Day DayName="четвер">
+			<Pair PairNum="2" Professor ="Бєлова А.С."/>
 		</Day>
+		<Day DayName="п'ятниця">
+			<Pair PairNum="1" Professor ="Ткаченко О.М."/>
+		</Day>
+	</Class>
+	<Class ClassName="202" SeatsNum="10">
 		<Day DayName="вівторок">
-			<Pair PairNum="1" Professor ="Костя"/>
-			<Pair PairNum="2" Professor ="Вася"/>
+			<Pair PairNum="1" Professor ="Бєлова А.С."/>
+			<Pair PairNum="3" Professor ="Омельчук Л.Л."/>
+			<Pair PairNum="4" Professor ="Ткаченко О.М."/>
+		</Day>
+		<Day DayName="середа">
+			<Pair PairNum="1" Professor ="Махно М.Ф."/>
+			<Pair PairNum="2" Professor ="Поліщук Н.В."/>
+		</Day>
+		<Day DayName="четвер">
+			<Pair PairNum="2" Professor ="Шевчук Ю.М."/>
+			<Pair PairNum="3" Professor ="Омельчук Л.Л."/>
+		</Day>
+	</Class>
+	<Class ClassName="203" SeatsNum="10">
+		<Day DayName="понеділок">
+			<Pair PairNum="3" Professor ="Поліщук Н.В."/>
+			<Pair PairNum="4" Professor ="Шевчук Ю.М."/>
+		</Day>
+	</Class>
+	<Class ClassName="204" SeatsNum="12">
+		<Day DayName="понеділок">
+			<Pair PairNum="2" Professor ="Поліщук Н.В."/>
+			<Pair PairNum="3" Professor ="Бєлова А.С."/>
+		</Day>
+		<Day DayName="п'ятниця">
+			<Pair PairNum="1" Professor ="Махно М.Ф."/>
 		</Day>
 	</Class>
 </root> 

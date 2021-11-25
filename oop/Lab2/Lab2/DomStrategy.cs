@@ -50,7 +50,7 @@ namespace Lab2
             return sb.ToString();
         }
 
-        public HashSet<string> getAttr(string attribute)
+        public HashSet<string> GetAttr(string attribute)
         {
             HashSet<string> res = new HashSet<string>();
             var attributes = xmlDoc.SelectNodes("//@" + attribute);

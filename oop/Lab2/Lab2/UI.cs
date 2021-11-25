@@ -10,44 +10,44 @@ using System.Windows.Forms;
 
 namespace Lab2
 {
-    public partial class Form1 : Form
+    public partial class UI : Form
     {
-        public Form1()
+        public UI()
         {
             InitializeComponent();
             context = new Context();
             context.SetStrategy(new DomStrategy(context.File));
             radioButtonDom.Checked = true;
-            fillComboBoxes(new DomStrategy(context.File));
+            fillComboBoxes();
         }
 
-        private void fillComboBoxes(DomStrategy dom)
+        private void fillComboBoxes()
         {
-            HashSet<string> attributes = dom.getAttr("ClassName");
+            HashSet<string> attributes = context.GetAttributes("ClassName");
             foreach (string atrr in attributes)
             {
                 comboBoxName.Items.Add(atrr);
             }
 
-            attributes = dom.getAttr("SeatsNum");
+            attributes = context.GetAttributes("SeatsNum");
             foreach (string atrr in attributes)
             {
                 comboBoxSeats.Items.Add(atrr);
             }
 
-            attributes = dom.getAttr("DayName");
+            attributes = context.GetAttributes("DayName");
             foreach (string atrr in attributes)
             {
                 comboBoxDay.Items.Add(atrr);
             }
 
-            attributes = dom.getAttr("PairNum");
+            attributes = context.GetAttributes("PairNum");
             foreach (string atrr in attributes)
             {
                 comboBoxPair.Items.Add(atrr);
             }
 
-            attributes = dom.getAttr("Professor");
+            attributes = context.GetAttributes("Professor");
             foreach (string atrr in attributes)
             {
                 comboBoxProfessor.Items.Add(atrr);
@@ -94,9 +94,18 @@ namespace Lab2
             makeQuery();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void buttonConvert_Click(object sender, EventArgs e)
         {
             context.ConvertToHtml();
+        }
+
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            comboBoxName.Text = "";
+            comboBoxSeats.Text = "";
+            comboBoxDay.Text = "";
+            comboBoxPair.Text = "";
+            comboBoxProfessor.Text = "";
         }
     }
 }

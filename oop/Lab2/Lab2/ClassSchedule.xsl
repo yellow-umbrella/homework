@@ -7,7 +7,7 @@
 	<xsl:template match="/">
 		<html>
 			<body>
-				<h2>Розклад кабінетів</h2>
+				<h2>Розклад роботи дисплейних класів</h2>
 				<table border="1">
 					<tr bgcolor="yellow">
 						<th style="text-align:center">Номер кабінету</th>
@@ -24,11 +24,12 @@
 							</td>
 							<td>
 								<xsl:for-each select="Day">
-										<p>>_<xsl:value-of select="@DayName"/></p>
+										<p>>&#160;<xsl:value-of select="@DayName"/><br/>
 									<xsl:for-each select="Pair">
-										<p>__пара <xsl:value-of select="@PairNum"/>
-										 - викладач: <xsl:value-of select="@Professor"/></p>			
+										&#160;&#160;&#160;&#160;&#160;пара <xsl:value-of select="@PairNum"/>
+										 - викладач: <xsl:value-of select="@Professor"/><br/>			
 									</xsl:for-each>
+										</p>
 								</xsl:for-each>
 							</td>
 						</tr>
