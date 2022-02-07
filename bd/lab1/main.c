@@ -34,7 +34,14 @@ FILE *fseasons;
 FILE *fraces;
 
 t_season* get_m(int id) {
-    fseek(fseasons_ind, sizeof(int)*(id-1), SEEK_SET); //todo check edge case
+    if (id < 1) {
+        return NULL;
+    }
+    fseek(fseasons_ind, 0L, SEEK_END);
+    if (ftell(fseasons_ind) <= sizeof(int)*(id-1)) {
+        return NULL;
+    }
+    fseek(fseasons_ind, sizeof(int)*(id-1), SEEK_SET);
     int offset;
     fread(&offset, sizeof(int), 1, fseasons_ind);
     t_season* season = (t_season*)malloc(sizeof(t_season));
@@ -55,8 +62,8 @@ t_season* get_m_ui() {
         printf("this season doesn`t exist.\n");
     } else {
         printf("-----------\n");
-        printf("season id: %d\nyear: %d\nrace director: %s\ntyre supplier: %s\n", 
-        season->id, season->year, season->race_director, season->tyre_supplier);
+        printf("season id: %d\nyear: %d\nrace director: %s\ntyre supplier: %s\nraces: %d\n", 
+        season->id, season->year, season->race_director, season->tyre_supplier, season->races_cnt);
     }
     return season;
 }
@@ -104,6 +111,10 @@ t_race* get_s_ui(int all_races) {
     } else {
         printf("enter race id: ");
         scanf("%d", &race_id);
+        if (race_id < 1) {
+            printf("this race doesn`t exist.\n");
+            return NULL;
+        }
     }
 
     array_pair result = get_s(season, race_id);
@@ -280,24 +291,50 @@ void del_s_ui() {
     del_s(race);
 }
 
+void count() {
+    int cnt_seasons = 0;
+    int cnt_races = 0;
+    fseek(fseasons_ind, 0L, SEEK_END);
+    int end = ftell(fseasons_ind)/sizeof(int);
+    int id = 1;
+    for (int id = 1; id <= end; id++) {
+        t_season *season = get_m(id);
+        if (season != NULL) {
+            cnt_seasons++;
+            cnt_races += season->races_cnt;
+        }
+    }
+    printf("seasons: %d\nraces: %d\n", cnt_seasons, cnt_races);
+}
+
 int main() {
-    fraces = fopen("races.fl", "w+");
-    fseasons = fopen("seasons.fl", "w+");
-    fseasons_ind = fopen("seasons.ind", "w+");
+    fraces = fopen("races.fl", "a+");
+    fseasons = fopen("seasons.fl", "a+");
+    fseasons_ind = fopen("seasons.ind", "a+");
+    fclose(fraces);
+    fclose(fseasons);
+    fclose(fseasons_ind);
+    fraces = fopen("races.fl", "r+");
+    fseasons = fopen("seasons.fl", "r+");
+    fseasons_ind = fopen("seasons.ind", "r+");
 
     while (1) {
         int command;
         printf("-----------\n");
-        printf("choose command:\n0: exit\n1: get-m\n2: get-s\n3: del-m\n4: del-s\n5: update-m\n6: update-s\n7: insert-m\n8: insert-s\n");
+        printf("choose command:\n0: exit\n1: get season\n2: get race\n3: del season\n4: del race\n");
+        printf("5: update season\n6: update race\n7: insert season\n8: insert race\n9: info\n");
         scanf("%d", &command);
         switch (command) {
             case 0:
+                fclose(fraces);
+                fclose(fseasons);
+                fclose(fseasons_ind);
                 return 0;
             case 1:
                 get_m_ui();
                 break;
             case 2:
-                printf("print concret race(0) or all races(1)?");
+                printf("print concrete race(0) or all races(1)? ");
                 int all_races;
                 scanf("%d", &all_races);
                 get_s_ui(all_races);
@@ -319,6 +356,9 @@ int main() {
                 break;
             case 8:
                 insert_s_ui();
+                break;
+            case 9:
+                count();
                 break;
             default:
                 printf("invalid command.");
