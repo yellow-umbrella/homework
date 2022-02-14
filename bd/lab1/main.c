@@ -3,6 +3,7 @@
 
 #define NAME_LEN 80
 #define RACE_NAME_LEN 100
+#define GARBAGE_BUFFER_LEN 50
 
 typedef struct {
     int id;
@@ -32,6 +33,7 @@ typedef struct {
 FILE *fseasons_ind;
 FILE *fseasons;
 FILE *fraces;
+FILE *fgarbage;
 
 t_season* get_m(int id) {
     if (id < 1) {
@@ -212,7 +214,7 @@ void update_s_ui() {
     printf("done.\n");
 }
 
-void insert_m_ui() {
+void insert_m_ui(int* garbage_buffer, int* n) {
     t_season season;
     printf("enter season year, race director and tyre supplier:\n");
     scanf("%d %s %s", &season.year, season.race_director, season.tyre_supplier);
@@ -220,11 +222,35 @@ void insert_m_ui() {
     season.id = ftell(fseasons_ind) / sizeof(int) + 1;
     season.races_cnt = 0;
     season.first_race = -1;
-    fseek(fseasons, 0L, SEEK_END);
+    if (*n > 0) {
+        (*n)--;
+        fseek(fseasons, garbage_buffer[*n], SEEK_SET);
+
+        t_season tmp;
+        fread(&tmp, sizeof(t_season), 1, fseasons);
+        season.first_race = tmp.first_race;
+        fseek(fseasons, garbage_buffer[*n], SEEK_SET);
+    } else {
+        fseek(fseasons, 0L, SEEK_END);
+    }
     int offset = ftell(fseasons);
     fwrite(&season, sizeof(t_season), 1, fseasons);
     fwrite(&offset, sizeof(int), 1, fseasons_ind);
     printf("season added with id %d.\n", season.id);
+}
+
+t_race* first_free_chunk(t_season* season) {
+    int next_race = season->first_race;
+    t_race* tmp = (t_race*)malloc(sizeof(t_race));
+    while (next_race != -1) {
+        fseek(fraces, next_race, SEEK_SET);
+        fread(tmp, sizeof(t_race), 1, fraces);
+        next_race = tmp->next_race;
+        if (tmp->empty) {
+            return tmp;
+        }
+    }
+    return NULL;
 }
 
 void insert_s_ui() {
@@ -236,26 +262,38 @@ void insert_s_ui() {
         printf("this season doesn`t exist.");
         return;
     }
-    season->races_cnt++;
+
     t_race race;
+    fseek(fraces, 0L, SEEK_END);
+    race.offset = ftell(fraces);
     race.season_id = season_id;
+    race.next_race = season->first_race;
     if (season->first_race == -1) {
         race.id = 1;
+        season->first_race = race.offset;
     } else {
-        int id;
-        fseek(fraces, season->first_race, SEEK_SET);
-        fread(&id, sizeof(int), 1, fraces);
-        race.id = id + 1;
+        t_race* free_chunk = first_free_chunk(season);
+        if (free_chunk == NULL) {
+            int id;
+            fseek(fraces, season->first_race, SEEK_SET);
+            fread(&id, sizeof(int), 1, fraces);
+            race.id = id + 1;
+            season->first_race = race.offset;
+        } else {
+            race = *free_chunk;
+        }
     }
-    race.next_race = season->first_race;
     race.empty = 0;
+
     printf("enter race name, lap count and lap length:\n");
     scanf("%s %d %d", race.name, &race.lap_count, &race.lap_length);
-    fseek(fraces, 0L, SEEK_END);
-    season->first_race = ftell(fraces);
-    race.offset = season->first_race;
+
+    fseek(fraces, race.offset, SEEK_SET);
     fwrite(&race, sizeof(t_race), 1, fraces);
+
+    season->races_cnt++;
     update_m(season);
+
     printf("race added with id %d.\n", race.id);
 }
 
@@ -268,7 +306,7 @@ void del_s(t_race *race) {
     update_m(season);
 }
 
-void del_m_ui() {
+void del_m_ui(int* garbage_buffer, int* n) {
     t_season *season = get_m_ui();
     if (season == NULL) {
         return;
@@ -277,11 +315,19 @@ void del_m_ui() {
     for (int i = 0; i < races.n; i++) {
         del_s(&races.array[i]);
     }
+
+    int tmp;
     fseek(fseasons_ind, sizeof(int)*(season->id-1), SEEK_SET);
-    int tmp = -1;
+    fread(&tmp, sizeof(int), 1, fseasons_ind);
+    if (*n < GARBAGE_BUFFER_LEN) {
+        garbage_buffer[*n] = tmp;
+        (*n)++;
+    }
+
+    tmp = -1;
+    fseek(fseasons_ind, sizeof(int)*(season->id-1), SEEK_SET);
     fwrite(&tmp, sizeof(int), 1, fseasons_ind);
 }
-
 
 void del_s_ui() {
     t_race *race = get_s_ui(0);
@@ -307,6 +353,15 @@ void count() {
     printf("seasons: %d\nraces: %d\n", cnt_seasons, cnt_races);
 }
 
+int read_garbage_buffer(int* garbage_buffer) {
+    fseek(fgarbage, 0L, SEEK_END);
+    int n = ftell(fgarbage)/sizeof(int);
+    n = n < GARBAGE_BUFFER_LEN ? n : GARBAGE_BUFFER_LEN;
+    fseek(fgarbage, 0L, SEEK_SET);
+    fread(garbage_buffer, sizeof(int), n, fgarbage);
+    return n;
+}
+
 int main() {
     fraces = fopen("races.fl", "a+");
     fseasons = fopen("seasons.fl", "a+");
@@ -317,6 +372,12 @@ int main() {
     fraces = fopen("races.fl", "r+");
     fseasons = fopen("seasons.fl", "r+");
     fseasons_ind = fopen("seasons.ind", "r+");
+
+    int garbage_buffer[GARBAGE_BUFFER_LEN];
+    fgarbage = fopen("garbage.fl", "a+");
+    int cur_buffer_len = read_garbage_buffer(garbage_buffer);
+    fclose(fgarbage);
+    fgarbage = fopen("garbage.fl", "w");
 
     while (1) {
         int command;
@@ -329,6 +390,8 @@ int main() {
                 fclose(fraces);
                 fclose(fseasons);
                 fclose(fseasons_ind);
+                fwrite(garbage_buffer, sizeof(int), cur_buffer_len, fgarbage);
+                fclose(fgarbage);
                 return 0;
             case 1:
                 get_m_ui();
@@ -340,7 +403,7 @@ int main() {
                 get_s_ui(all_races);
                 break;
             case 3:
-                del_m_ui();
+                del_m_ui(garbage_buffer, &cur_buffer_len);
                 break;
             case 4:
                 del_s_ui();
@@ -352,7 +415,7 @@ int main() {
                 update_s_ui();
                 break;
             case 7:
-                insert_m_ui();
+                insert_m_ui(garbage_buffer, &cur_buffer_len);
                 break;
             case 8:
                 insert_s_ui();
