@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Formula1.Season>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Сезони</h1>
+
+<p>
+    <a asp-action="Create">Створити</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RaceDirector)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TyreSupplier)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rules)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceDirector)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TyreSupplier.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rules)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Гонки</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

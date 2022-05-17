@@ -1,0 +1,45 @@
+﻿@model Formula1.Race
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Видалити</h1>
+
+<h3>Ви впевнені, що хочете видалити гонку і всі пов'язані з нею записи?</h3>
+<div>
+    <h4>Гонка</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Season)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Season.Year)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Circuite)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Circuite.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LapCount)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LapCount)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Видалити" class="btn btn-danger" /> |
+        @Html.ActionLink("Назад до списку", "Index", new { id = @ViewBag.SeasonId})
+    </form>
+</div>

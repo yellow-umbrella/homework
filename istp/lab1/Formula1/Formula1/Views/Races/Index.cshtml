@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Formula1.Race>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Гонки</h1>
+
+
+<p>
+    @Html.ActionLink("Додати нову гонку в сезон", "Create", new { seasonId = @ViewBag.SeasonId})
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LapCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Circuite)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Season)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LapCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Circuite.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Season.Year)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Результати</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

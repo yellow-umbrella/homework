@@ -1,0 +1,39 @@
+﻿@model Formula1.RaceResult
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Видалити</h1>
+
+<h3>Ви впевнені, що хочете видалити цей результат?</h3>
+<div>
+    <h4>Результат гонки</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Driver)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Driver.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Place)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Place)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Points)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Points)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Видалити" class="btn btn-danger" /> |
+        @Html.ActionLink("Назад до списку", "Index", new { id = @ViewBag.RaceId})
+    </form>
+</div>

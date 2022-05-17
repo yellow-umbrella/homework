@@ -44,7 +44,7 @@ namespace Formula1
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.Circuites)
                     .HasForeignKey(d => d.CountryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("FK_Circuites_Countries");
             });
 
@@ -60,7 +60,7 @@ namespace Formula1
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.Drivers)
                     .HasForeignKey(d => d.CountryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Drivers_Countries");
             });
 
@@ -69,19 +69,19 @@ namespace Formula1
                 entity.HasOne(d => d.Driver)
                     .WithMany(p => p.DriverActivities)
                     .HasForeignKey(d => d.DriverId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_DriverActivities_Drivers");
 
                 entity.HasOne(d => d.Season)
                     .WithMany(p => p.DriverActivities)
                     .HasForeignKey(d => d.SeasonId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_DriverActivities_Seasons");
 
                 entity.HasOne(d => d.Team)
                     .WithMany(p => p.DriverActivities)
                     .HasForeignKey(d => d.TeamId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_DriverActivities_Teams");
             });
 
@@ -92,13 +92,13 @@ namespace Formula1
                 entity.HasOne(d => d.Circuite)
                     .WithMany(p => p.Races)
                     .HasForeignKey(d => d.CircuiteId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Races_Circuites");
 
                 entity.HasOne(d => d.Season)
                     .WithMany(p => p.Races)
                     .HasForeignKey(d => d.SeasonId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Races_Seasons");
             });
 
@@ -107,13 +107,13 @@ namespace Formula1
                 entity.HasOne(d => d.Driver)
                     .WithMany(p => p.RaceResults)
                     .HasForeignKey(d => d.DriverId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_RaceResults_Drivers");
 
                 entity.HasOne(d => d.Race)
                     .WithMany(p => p.RaceResults)
                     .HasForeignKey(d => d.RaceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_RaceResults_Races");
             });
 
@@ -121,12 +121,12 @@ namespace Formula1
             {
                 entity.Property(e => e.RaceDirector).HasMaxLength(50);
 
-                entity.Property(e => e.Rules).HasMaxLength(50);
+                //entity.Property(e => e.Rules).HasMaxLength(50);
 
                 entity.HasOne(d => d.TyreSupplier)
                     .WithMany(p => p.Seasons)
                     .HasForeignKey(d => d.TyreSupplierId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Seasons_TyreSuppliers");
             });
 

@@ -1,0 +1,42 @@
+﻿@model Formula1.Season
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Деталі</h1>
+
+<div>
+    <h4>Сезон</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Year)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Year)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RaceDirector)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RaceDirector)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Rules)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Rules)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TyreSupplier)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TyreSupplier.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Редагувати</a> |
+    <a asp-action="Index">Повернутися до списку</a>
+</div>
