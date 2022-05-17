@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Lab1
 {
-    public partial class Form1 : Form
+    public partial class UI : Form
     {
-        public Form1()
+        public UI()
         {
             InitializeComponent();
             createDataGridView(4, 4);

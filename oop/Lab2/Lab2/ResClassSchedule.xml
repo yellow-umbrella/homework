@@ -15,4 +15,19 @@
       <Pair PairNum="3" Professor="Шевчук Ю.М." />
     </Day>
   </Class>
+  <Class ClassName="203" SeatsNum="10">
+    <Day DayName="понеділок">
+      <Pair PairNum="3" Professor="Поліщук Н.В." />
+      <Pair PairNum="4" Professor="Шевчук Ю.М." />
+    </Day>
+  </Class>
+  <Class ClassName="204" SeatsNum="12">
+    <Day DayName="понеділок">
+      <Pair PairNum="2" Professor="Поліщук Н.В." />
+      <Pair PairNum="3" Professor="Бєлова А.С." />
+    </Day>
+    <Day DayName="п'ятниця">
+      <Pair PairNum="1" Professor="Махно М.Ф." />
+    </Day>
+  </Class>
 </root>
