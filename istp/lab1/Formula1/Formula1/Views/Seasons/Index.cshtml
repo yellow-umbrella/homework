@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Formula1.Season>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Сезони";
 }
 
 <h1>Сезони</h1>
@@ -40,7 +40,10 @@
                 @Html.DisplayFor(modelItem => item.TyreSupplier.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Rules)
+                @if (item.Rules != null) 
+                {
+                    <a href = @Html.DisplayFor(modelItem => item.Rules)>Правила-></a>
+                }
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Гонки</a> |

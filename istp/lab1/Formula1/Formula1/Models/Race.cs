@@ -24,6 +24,7 @@ namespace Formula1
         [Required(ErrorMessage = "Поле не повинно бути порожнім")]
         //[Range(1900, 2022, ErrorMessage = "Значення має бути в межах між 1900 та 2022")]
         [Display(Name = "Дата проведення")]
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         [Required(ErrorMessage = "Поле не повинно бути порожнім")]

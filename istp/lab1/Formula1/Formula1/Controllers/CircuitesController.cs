@@ -58,11 +58,17 @@ namespace Formula1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CountryId,Name")] Circuite circuite)
         {
-            if (ModelState.IsValid)
+            bool check = _context.Circuites.Any(c => c.CountryId == circuite.CountryId && 
+                                                    c.Name == circuite.Name);
+            if (ModelState.IsValid && !check)
             {
                 _context.Add(circuite);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+            if (check)
+            {
+                ViewBag.error = "Помилка додавання! Така траса уже існує в цій країні";
             }
             ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", circuite.CountryId);
             return View(circuite);
@@ -81,7 +87,7 @@ namespace Formula1.Controllers
             {
                 return NotFound();
             }
-            ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Id", circuite.CountryId);
+            ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", circuite.CountryId);
             return View(circuite);
         }
 
@@ -97,7 +103,10 @@ namespace Formula1.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            bool check = _context.Circuites.Any(c => c.CountryId == circuite.CountryId &&
+                                                    c.Name == circuite.Name && c.Id != circuite.Id);
+
+            if (ModelState.IsValid && !check)
             {
                 try
                 {
@@ -117,7 +126,11 @@ namespace Formula1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Id", circuite.CountryId);
+            if (check)
+            {
+                ViewBag.error = "Помилка додавання! Така траса уже існує в цій країні";
+            }
+            ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", circuite.CountryId);
             return View(circuite);
         }
 

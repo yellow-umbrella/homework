@@ -67,6 +67,10 @@ namespace Formula1.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            if (check)
+            {
+                ViewBag.error = "Помилка додавання! Сезон цього року уже існує";
+            }
             ViewData["TyreSupplierId"] = new SelectList(_context.TyreSuppliers, "Id", "Name", season.TyreSupplierId);
             return View(season);
         }
@@ -99,8 +103,8 @@ namespace Formula1.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            bool check = _context.Seasons.Any(s => s.Year == season.Year && s.Id != id);
+            if (ModelState.IsValid && !check)
             {
                 try
                 {
@@ -119,6 +123,10 @@ namespace Formula1.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }
+            if (check)
+            {
+                ViewBag.error = "Помилка додавання! Сезон цього року уже існує";
             }
             ViewData["TyreSupplierId"] = new SelectList(_context.TyreSuppliers, "Id", "Name", season.TyreSupplierId);
             return View(season);

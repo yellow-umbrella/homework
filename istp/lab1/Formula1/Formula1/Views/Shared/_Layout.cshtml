@@ -20,9 +20,6 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Seasons" asp-action="Index">Сезони</a>
                         </li>
                         <li class="nav-item">
@@ -47,6 +44,18 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @if(ViewBag.error != null)
+            {   
+                <div class="alert alert-dismissible alert-danger">
+                  <strong>@ViewBag.error</strong>
+                </div>
+            }
+            @if(ViewData["Title"].ToString() == "Delete")
+            {   
+                <div class="alert alert-dismissible alert-warning">
+                  <strong>Точно хочете видалити? Всі пов'язані записи також видаляться</strong>
+                </div>
+            }
             @RenderBody()
         </main>
     </div>

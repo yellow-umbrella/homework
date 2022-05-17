@@ -14,9 +14,9 @@ namespace Formula1
 
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Поле не повинно бути порожнім")]
+        //[Required(ErrorMessage = "Поле не повинно бути порожнім")]
         [Display(Name = "Країна")]
-        public int CountryId { get; set; }
+        public int? CountryId { get; set; }
 
         [Required(ErrorMessage = "Поле не повинно бути порожнім")]
         [Display(Name = "Ім'я")]

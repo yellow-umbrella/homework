@@ -57,11 +57,16 @@ namespace Formula1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Country country)
         {
-            if (ModelState.IsValid)
+            bool check = _context.Countries.Any(c => c.Name == country.Name);
+            if (ModelState.IsValid && !check)
             {
                 _context.Add(country);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+            if (check)
+            {
+                ViewBag.error = "Помилка додавання! Така країна уже існує";
             }
             return View(country);
         }
@@ -94,7 +99,9 @@ namespace Formula1.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            bool check = _context.Countries.Any(c => c.Name == country.Name && c.Id != country.Id);
+
+            if (ModelState.IsValid && !check)
             {
                 try
                 {
@@ -113,6 +120,10 @@ namespace Formula1.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }
+            if (check)
+            {
+                ViewBag.error = "Помилка додавання! Така країна уже існує";
             }
             return View(country);
         }

@@ -69,7 +69,9 @@ namespace Formula1.Controllers
         public async Task<IActionResult> Create(int seasonId, [Bind("Id,SeasonId,CircuiteId,Date,LapCount")] Race race)
         {
             race.SeasonId = seasonId;
-            if (ModelState.IsValid)
+            var _race = race;
+            _race.Season = await _context.Seasons.FirstOrDefaultAsync(m => m.Id == race.SeasonId);
+            if (ModelState.IsValid && Validate(_race))
             {
                 _context.Add(race);
                 await _context.SaveChangesAsync();
@@ -80,6 +82,24 @@ namespace Formula1.Controllers
             ViewBag.SeasonId = seasonId;
             //ViewData["SeasonId"] = new SelectList(_context.Seasons, "Id", "Name", race.SeasonId);
             return View(race);
+        }
+
+        bool Validate(Race race, int id = 0)
+        {
+            bool check1 = _context.Races.Any(d => d.Date == race.Date
+                                                    && d.Id != id);
+            bool check2 = race.Date.Year != race.Season.Year;
+
+            if (check1)
+            {
+                ViewBag.error = "Помилка додавання! Така гонка уже існує";
+            }
+            if (check2)
+            {
+                ViewBag.error = "Помилка додавання! Вказано неправильний рік";
+            }
+
+            return !(check1 || check2);
         }
 
         // GET: Races/Edit/5
@@ -113,8 +133,9 @@ namespace Formula1.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            var _race = race;
+            _race.Season = await _context.Seasons.FirstOrDefaultAsync(m => m.Id == race.SeasonId);
+            if (ModelState.IsValid && Validate(_race, id))
             {
                 try
                 {

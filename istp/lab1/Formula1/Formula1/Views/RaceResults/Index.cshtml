@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Formula1.RaceResult>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Результати гонки";
 }
 
 <h1>Результати гонки</h1>
@@ -45,3 +45,7 @@
 }
     </tbody>
 </table>
+
+<div>
+     @Html.ActionLink("Назад до списку", "Index", "Races", new { id = @ViewBag.SeasonId})
+</div>

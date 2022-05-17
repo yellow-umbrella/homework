@@ -58,13 +58,20 @@ namespace Formula1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CountryId,Name,CareerStartYear")] Driver driver)
         {
-            if (ModelState.IsValid)
+            bool check = _context.Drivers.Any(c => c.Name == driver.Name 
+                                                && c.CareerStartYear == driver.CareerStartYear
+                                                && c.CountryId == driver.CountryId);
+            if (ModelState.IsValid && !check)
             {
                 _context.Add(driver);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", driver.CountryId);
+            if (check)
+            {
+                ViewBag.error = "Помилка додавання! Такий гонщик уже існує";
+            }
             return View(driver);
         }
 
@@ -96,8 +103,11 @@ namespace Formula1.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            bool check = _context.Drivers.Any(c => c.Name == driver.Name
+                                                && c.CareerStartYear == driver.CareerStartYear
+                                                && c.CountryId == driver.CountryId
+                                                && c.Id != driver.Id);
+            if (ModelState.IsValid && !check)
             {
                 try
                 {
@@ -116,6 +126,10 @@ namespace Formula1.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }
+            if (check)
+            {
+                ViewBag.error = "Помилка додавання! Такий гонщик уже існує";
             }
             ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", driver.CountryId);
             return View(driver);

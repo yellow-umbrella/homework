@@ -58,11 +58,16 @@ namespace Formula1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,FoundationYear")] Team team)
         {
-            if (ModelState.IsValid)
+            bool check = _context.Teams.Any(c => c.Name == team.Name);
+            if (ModelState.IsValid && !check)
             {
                 _context.Add(team);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+            if (check)
+            {
+                ViewBag.error = "Помилка додавання! Така команда уже існує";
             }
             return View(team);
         }
@@ -94,8 +99,8 @@ namespace Formula1.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            bool check = _context.Teams.Any(c => c.Name == team.Name && c.Id != id);
+            if (ModelState.IsValid && !check)
             {
                 try
                 {
@@ -114,6 +119,10 @@ namespace Formula1.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }
+            if (check)
+            {
+                ViewBag.error = "Помилка додавання! Така команда уже існує";
             }
             return View(team);
         }

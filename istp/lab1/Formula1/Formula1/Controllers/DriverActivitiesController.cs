@@ -70,7 +70,13 @@ namespace Formula1.Controllers
         public async Task<IActionResult> Create(int teamId, [Bind("Id,TeamId,SeasonId,DriverId")] DriverActivity driverActivity)
         {
             driverActivity.TeamId = teamId;
-            if (ModelState.IsValid)
+
+            var activity = driverActivity;
+            activity.Team = await _context.Teams.FirstOrDefaultAsync(m => m.Id == driverActivity.TeamId);
+            activity.Season = await _context.Seasons.FirstOrDefaultAsync(m => m.Id == driverActivity.SeasonId);
+            activity.Driver = await _context.Drivers.FirstOrDefaultAsync(m => m.Id == driverActivity.DriverId);
+            
+            if (ModelState.IsValid && Validate(activity))
             {
                 _context.Add(driverActivity);
                 await _context.SaveChangesAsync();
@@ -81,7 +87,32 @@ namespace Formula1.Controllers
             ViewData["SeasonId"] = new SelectList(_context.Seasons, "Id", "Year", driverActivity.SeasonId);
             //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", driverActivity.TeamId);
             ViewBag.TeamId = teamId;
+            
             return View(driverActivity);
+        }
+
+        private bool Validate(DriverActivity activity, int id = 0)
+        {
+            bool check1 = _context.DriverActivities.Any(d => d.TeamId == activity.TeamId &&
+                                                    d.SeasonId == activity.SeasonId &&
+                                                    d.DriverId == activity.DriverId &&
+                                                    d.Id != id);
+            bool check2 = activity.Driver.CareerStartYear > activity.Season.Year;
+            bool check3 = activity.Team.FoundationYear > activity.Season.Year;
+
+            if (check1)
+            {
+                ViewBag.error = "Помилка додавання! Цей гонщик уже доданий в цю команду цього сезону";
+            }
+            if (check2)
+            {
+                ViewBag.error = "Помилка додавання! Цей гонщик почав свою кар'єру пізніше цього сезону";
+            }
+            if (check3)
+            {
+                ViewBag.error = "Помилка додавання! Ця команда не існувала під час цього сезону";
+            }
+            return !(check1 || check2|| check3);
         }
 
         // GET: DriverActivities/Edit/5
@@ -115,8 +146,12 @@ namespace Formula1.Controllers
             {
                 return NotFound();
             }
+            var activity = driverActivity;
+            activity.Team = await _context.Teams.FirstOrDefaultAsync(m => m.Id == driverActivity.TeamId);
+            activity.Season = await _context.Seasons.FirstOrDefaultAsync(m => m.Id == driverActivity.SeasonId);
+            activity.Driver = await _context.Drivers.FirstOrDefaultAsync(m => m.Id == driverActivity.DriverId);
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && Validate(activity, id))
             {
                 try
                 {

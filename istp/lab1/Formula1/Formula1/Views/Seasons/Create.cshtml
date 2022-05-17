@@ -14,7 +14,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="TyreSupplierId" class="control-label"></label>
-                <select asp-for="TyreSupplierId" class ="form-control" asp-items="ViewBag.TyreSupplierId"></select>
+                <select asp-for="TyreSupplierId" class ="form-control" asp-items="ViewBag.TyreSupplierId">
+                    <option selected></option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="Year" class="control-label"></label>

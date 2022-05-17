@@ -15,7 +15,9 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="TyreSupplierId" class="control-label"></label>
-                <select asp-for="TyreSupplierId" class="form-control" asp-items="ViewBag.TyreSupplierId"></select>
+                <select asp-for="TyreSupplierId" class="form-control" asp-items="ViewBag.TyreSupplierId">
+                    <option selected></option>
+                </select>
                 <span asp-validation-for="TyreSupplierId" class="text-danger"></span>
             </div>
             <div class="form-group">

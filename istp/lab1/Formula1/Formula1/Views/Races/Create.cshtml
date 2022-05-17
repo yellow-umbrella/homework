@@ -16,7 +16,9 @@
             
             <div class="form-group">
                 <label asp-for="CircuiteId" class="control-label"></label>
-                <select asp-for="CircuiteId" class ="form-control" asp-items="ViewBag.CircuiteId"></select>
+                <select asp-for="CircuiteId" class ="form-control" asp-items="ViewBag.CircuiteId">
+                    <option disabled selected style = "display:none"></option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>

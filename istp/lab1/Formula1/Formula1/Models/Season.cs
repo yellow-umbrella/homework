@@ -13,9 +13,9 @@ namespace Formula1
         }
 
         public int Id { get; set; }
-        [Required(ErrorMessage = "Поле не повинно бути порожнім")]
+        //[Required(ErrorMessage = "Поле не повинно бути порожнім")]
         [Display(Name = "Поставщик шин")]
-        public int TyreSupplierId { get; set; }
+        public int? TyreSupplierId { get; set; }
 
         [Required(ErrorMessage = "Поле не повинно бути порожнім")]
         [Range(1900, 2022, ErrorMessage = "Значення має бути в межах між 1900 та 2022")]

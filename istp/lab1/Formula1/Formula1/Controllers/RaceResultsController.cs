@@ -23,10 +23,11 @@ namespace Formula1.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction("Index", "Seasons");
+                return RedirectToAction("Index", "Races");
             }
             ViewBag.RaceId = id;
-
+            var race = await _context.Races.FirstOrDefaultAsync(m => m.Id == id);
+            ViewBag.SeasonId = race.SeasonId;
             var dBFormula1Context = _context.RaceResults.Where(r => r.RaceId == id).Include(r => r.Driver).Include(r => r.Race);
             return View(await dBFormula1Context.ToListAsync());
         }
@@ -68,7 +69,7 @@ namespace Formula1.Controllers
         public async Task<IActionResult> Create(int raceId, [Bind("Id,RaceId,DriverId,Place,Points")] RaceResult raceResult)
         {
             raceResult.RaceId = raceId;
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && Validate(raceResult))
             {
                 _context.Add(raceResult);
                 await _context.SaveChangesAsync();
@@ -79,6 +80,27 @@ namespace Formula1.Controllers
             //ViewData["RaceId"] = new SelectList(_context.Races, "Id", "Name", raceResult.RaceId);
             ViewBag.RaceId = raceId;
             return View(raceResult);
+        }
+
+        bool Validate(RaceResult raceResult, int id = 0)
+        {
+            bool check1 = _context.RaceResults.Any(d => d.DriverId == raceResult.DriverId 
+                                                    && d.RaceId == raceResult.RaceId
+                                                    && d.Id != id);
+            bool check2 = _context.RaceResults.Any(d => d.Place == raceResult.Place
+                                                    && d.RaceId == raceResult.RaceId
+                                                    && d.Id != id);
+
+            if (check1)
+            {
+                ViewBag.error = "Помилка додавання! Результати гонщика уже були додані";
+            }
+            if (check2)
+            {
+                ViewBag.error = "Помилка додавання! Це місце уже зайняте";
+            }
+            
+            return !(check1 || check2);
         }
 
         // GET: RaceResults/Edit/5
@@ -112,7 +134,7 @@ namespace Formula1.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && Validate(raceResult, id))
             {
                 try
                 {

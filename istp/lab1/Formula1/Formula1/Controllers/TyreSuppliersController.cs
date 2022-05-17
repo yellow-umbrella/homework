@@ -57,11 +57,17 @@ namespace Formula1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] TyreSupplier tyreSupplier)
         {
-            if (ModelState.IsValid)
+            bool check = _context.TyreSuppliers.Any(c => c.Name == tyreSupplier.Name);
+
+            if (ModelState.IsValid && !check)
             {
                 _context.Add(tyreSupplier);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+            if (check)
+            {
+                ViewBag.error = "Помилка додавання! Такий поставщик шин уже існує";
             }
             return View(tyreSupplier);
         }
@@ -93,8 +99,10 @@ namespace Formula1.Controllers
             {
                 return NotFound();
             }
+            bool check = _context.TyreSuppliers.Any(c => c.Name == tyreSupplier.Name
+                                                            && c.Id != id);
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && !check)
             {
                 try
                 {
@@ -113,6 +121,10 @@ namespace Formula1.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }
+            if (check)
+            {
+                ViewBag.error = "Помилка додавання! Такий поставщик шин уже існує";
             }
             return View(tyreSupplier);
         }
