@@ -10,10 +10,12 @@ namespace HeroAPIWebApp.Models
         }
 
         public int Id { get; set; }
-
+        [Required]
         public string Name { get; set; }
-
+        [Required]
+        [Range(0, 10)]
         public int Rating { get; set; }
+
         public string Description { get; set; }
 
         public virtual ICollection<Hero> Heroes { get; set; }

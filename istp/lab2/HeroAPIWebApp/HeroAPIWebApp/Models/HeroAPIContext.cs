@@ -6,7 +6,7 @@ namespace HeroAPIWebApp.Models
     {
         public virtual DbSet<Hero> Heroes { get; set; }
         public virtual DbSet<Race> Races { get; set; }
-        public virtual DbSet<Class> Classes { get; set; }
+        public virtual DbSet<GameClass> GameClasses { get; set; }
         public virtual DbSet<RaceSkill> RaceSkills { get; set; }
         public virtual DbSet<ClassSkill> ClassSkills { get; set; }
         public virtual DbSet<Skill> Skills { get; set; }

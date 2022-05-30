@@ -2,16 +2,16 @@
 
 namespace HeroAPIWebApp.Models
 {
-    public class Class
+    public class GameClass
     {
-        public Class()
+        public GameClass()
         {
             Heroes = new List<Hero>();
             ClassSkills = new List<ClassSkill>();
         }
 
         public int Id { get; set; }
-
+        [Required]
         public string Name { get; set; }
         public string Description { get; set; }
 
