@@ -13,8 +13,8 @@ namespace HeroAPIWebApp.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        [Range(0, 10)]
-        public double Rating { get; set; }
+        [Range(0, 100)]
+        public int Rating { get; set; }
 
         public string Description { get; set; }
 

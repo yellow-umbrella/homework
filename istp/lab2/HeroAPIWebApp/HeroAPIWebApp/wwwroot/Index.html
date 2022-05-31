@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Герой фентезі гри</title>
+    <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+    <h1>Герой фентезі гри</h1>
+    <h3>Додати вміння</h3>
+    <form action="javascript:void(0);" method="POST" onsubmit="addSkill()">
+        <input type="text" id="add-name" placeholder="Назва вміння">
+        <input type="text" id="add-description" placeholder="Опис вміння">
+        <input type="submit" value="Додати">
+    </form>
+    <div id="editSkill">
+        <h3>Редагувати</h3>
+        <form action="javascript:void(0);" onsubmit="updateSkill()">
+            <input type="hidden" id="edit-id">
+            <input type="text" id="edit-name">
+            <input type="text" id="edit-description">
+            <input type="submit" value="Зберегти">
+            <a onclick="closeInput()" aria-label="Close">&times;</a>
+        </form>
+    </div>
+    <p id="counter"></p>
+    <table>
+        <tr>
+            <th>Назва</th>
+            <th>Опис</th>
+        </tr>
+        <tbody id="skills"></tbody>
+    </table>
+    <script src="js/lab2.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        getSkills();
+    </script>
+</body>
+</html>
