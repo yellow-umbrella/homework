@@ -60,7 +60,7 @@ namespace HeroAPIWebApp.Controllers
                 return BadRequest();
             }
 
-            if (_context.ClassSkills.Any(s => s.ClassId == classSkill.ClassId && s.SkillId == classSkill.SkillId
+            if (_context.ClassSkills.Any(s => s.GameClassId == classSkill.GameClassId && s.SkillId == classSkill.SkillId
                                          && s.Id != classSkill.Id))
             {
                 return Problem("Entity with this parameters has already existed");
@@ -97,7 +97,7 @@ namespace HeroAPIWebApp.Controllers
                 return Problem("Entity set 'HeroAPIContext.ClassSkills'  is null.");
             }
 
-            if (_context.ClassSkills.Any(s => s.ClassId == classSkill.ClassId && s.SkillId == classSkill.SkillId))
+            if (_context.ClassSkills.Any(s => s.GameClassId == classSkill.GameClassId && s.SkillId == classSkill.SkillId))
             {
                 return Problem("Entity with this parameters has already existed");
             }

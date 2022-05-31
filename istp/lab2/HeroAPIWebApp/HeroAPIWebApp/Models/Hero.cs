@@ -14,6 +14,7 @@ namespace HeroAPIWebApp.Models
         public int RaceId { get; set; }
         [Required]
         public int GameClassId { get; set; }
+        [Required]
         public int CompanionId { get; set; }
 
         public virtual Race Race { get; set; }

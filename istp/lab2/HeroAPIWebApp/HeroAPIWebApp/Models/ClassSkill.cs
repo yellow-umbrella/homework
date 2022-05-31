@@ -6,7 +6,7 @@ namespace HeroAPIWebApp.Models
     {
         public int Id { get; set; }
         [Required]
-        public int ClassId { get; set; }
+        public int GameClassId { get; set; }
         [Required]
         public int SkillId { get; set; }
 
