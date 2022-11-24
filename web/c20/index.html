@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Treasure Box</title>
+        <script src="https://cdn.ethers.io/lib/ethers-5.1.umd.min.js"></script>
+        <script>
+            const abi = [
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_secret",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "message",
+          "type": "string"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "claim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "claimed",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "hash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "commit",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "commitments",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_secret",
+          "type": "bytes32"
+        }
+      ],
+      "name": "reinit",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "secret",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ];
+            const address = '0xaA963695B5f805311904d9B3606F1C495C480F1C';
+            let contract = new ethers.Contract(address, abi);
+            
+            async function commit(message) {
+                const salt = ethers.utils.randomBytes(32);
+                const hash = ethers.utils.keccak256([...ethers.utils.toUtf8Bytes(message), ...salt]);
+                console.log('commited: ', hash, ", salt: ", salt);
+                try {
+                    const tx = await contract.commit(hash);
+                    await tx.wait();
+                } catch(e) {
+                    alert(e.error.message);
+                    return null;
+                }
+                return salt;
+            }
+            async function claim(message, salt) {
+                console.log("try to claim: message - ", message, ", salt - ", salt);
+                try {
+                    const tx = await contract.claim(message, salt);
+                    await tx.wait();
+                } catch (e) {
+                    alert(e.error.message);
+                }
+            }
+            async function guess(message) {
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                const signer = provider.getSigner();
+                contract = contract.connect(signer);
+                const salt = await commit(message);
+                if (salt) {
+                    await claim(message, salt);
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <form>
+            <label for="answer">Your answer:</label>
+            <input type="text" id="answer" name="answer"> 
+            <button type="button" 
+            onclick="guess(document.getElementById('answer').value)">
+                Submit
+            </button> 
+        </form>
+    </body>
+</html> 
