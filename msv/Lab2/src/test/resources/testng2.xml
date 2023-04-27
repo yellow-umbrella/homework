@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Parallel Test">
+    <test name="Main Test Group" parallel="true" thread-count="2">
+        <classes>
+            <class name="MainTest"/>
+        </classes>
+    </test>
+    <test name="Word Processor Group" parallel="true" thread-count="2">
+        <groups>
+            <run>
+                <include name="word processor"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="WordProcessorTest"/>
+        </classes>
+    </test>
+</suite>

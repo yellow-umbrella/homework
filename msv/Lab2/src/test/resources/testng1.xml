@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="First Test">
+    <test name="WordProcessor Test Group without Exception Group">
+        <groups>
+            <run>
+                <exclude name="exception"/>
+                <include name="word processor"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="WordProcessorTest"/>
+        </classes>
+    </test>
+</suite>
