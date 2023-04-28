@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Mockito tests">
+    <test name="Mock group">
+        <groups>
+            <run>
+                <include name="mock"/>
+            </run>
+        </groups>
+    </test>
+    <test name="Spy group">
+        <groups>
+            <run>
+                <include name="spy"/>
+            </run>
+        </groups>
+    </test>
+    <packages>
+        <package name="com.manty.tests"/>
+    </packages>
+</suite>
