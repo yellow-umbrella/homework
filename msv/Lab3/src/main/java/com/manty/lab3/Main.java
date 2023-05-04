@@ -22,7 +22,7 @@ public class Main {
 
     public static List<String> processFile(String file) throws IOException {
         WordProcessor wordProcessor = new WordProcessor();
-        Set<String> words = wordProcessor.readWords(file);
+        Set<String> words = wordProcessor.chooseWords(file);
         ArrayList<String> res = new ArrayList<>(words);
         Collections.sort(res);
         return res;

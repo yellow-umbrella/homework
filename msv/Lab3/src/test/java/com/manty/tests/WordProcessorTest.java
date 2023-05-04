@@ -19,17 +19,21 @@ import java.util.Set;
 
 public class WordProcessorTest {
     @Mock
-    private MyScanner mockedScanner = new MyScanner();
+    private MyScanner mockedScanner;
 
     @InjectMocks
-    private WordProcessor wordProcessor = new WordProcessor();
+    private WordProcessor wordProcessor;
 
     @BeforeMethod(alwaysRun = true)
     public void initMocks() {
+        mockedScanner = new MyScanner();
+        wordProcessor = new WordProcessor();
+        spiedWordProcessor = new WordProcessor();
+
         MockitoAnnotations.openMocks(this);
     }
 
-    @DataProvider(name = "readWordsTestData")
+    @DataProvider(name = "TestData")
     public Object[][] testData() {
         return new Object[][]{
                 {"in1.txt", List.of("abbb,nblj khv   lb", "123nbk, Kkbkzv"),
@@ -41,47 +45,48 @@ public class WordProcessorTest {
         };
     }
 
-    @Test(dataProvider = "readWordsTestData", groups = {"mock"})
-    void readWords(String filename, List<String> lines, String[] expectedWords) throws IOException {
+    @Test(dataProvider = "TestData", groups = {"mock"})
+    void chooseWords(String filename, List<String> lines, String[] expectedWords) throws IOException {
+
         Mockito.when(mockedScanner.readLines(filename)).thenReturn(lines);
-        assertThat(wordProcessor.readWords(filename), containsInAnyOrder(expectedWords));
+        assertThat(wordProcessor.chooseWords(filename), containsInAnyOrder(expectedWords));
 
         Mockito.verify(mockedScanner, Mockito.atLeastOnce()).readLines(filename);
     }
 
     @Test(groups = {"mock"})
-    void readWordsIOException() throws IOException {
+    void chooseWordsIOException() throws IOException {
         String filename = "in.txt";
 
         Mockito.when(mockedScanner.readLines(filename)).thenReturn(null);
         assertThrows(IOException.class,
-                () -> wordProcessor.readWords(filename));
+                () -> wordProcessor.chooseWords(filename));
 
         Mockito.verify(mockedScanner, Mockito.atLeastOnce()).readLines(filename);
     }
 
     @Test(groups = {"mock"})
-    void readWordsFileNotFoundException() throws IOException {
+    void chooseWordsFileNotFoundException() throws IOException {
         String filename = "nonexistent_file.txt";
 
         Mockito.when(mockedScanner.readLines(filename)).
                 thenThrow(FileNotFoundException.class);
         assertThrows(FileNotFoundException.class,
-                () -> wordProcessor.readWords(filename));
+                () -> wordProcessor.chooseWords(filename));
 
         Mockito.verify(mockedScanner, Mockito.atLeastOnce()).readLines(filename);
     }
 
     @Test(groups = {"mock"})
-    void readWordsDefault() throws IOException {
+    void chooseWordsDefault() throws IOException {
         String filename = "in1.txt";
 
-        assertEquals(wordProcessor.readWords(filename), new HashSet<String>());
+        assertEquals(wordProcessor.chooseWords(filename), new HashSet<String>());
         Mockito.verify(mockedScanner, Mockito.atLeastOnce()).readLines(filename);
     }
 
     @Spy
-    WordProcessor spiedWordProcessor = new WordProcessor();
+    WordProcessor spiedWordProcessor;
 
     @Test(groups = {"spy"})
     void spiedFindWordsInLine() {

@@ -10,7 +10,7 @@ public class WordProcessor {
     final int maxLength = 30;
     MyScanner scanner = new MyScanner();
 
-    public Set<String> readWords(String filename) throws IOException {
+    public Set<String> chooseWords(String filename) throws IOException {
         Set<String> words = new HashSet<String>();
         List<String> lines = scanner.readLines(filename);
         if (lines == null) {
