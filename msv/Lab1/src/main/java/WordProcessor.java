@@ -2,21 +2,20 @@ import java.io.*;
 import java.util.*;
 
 public class WordProcessor {
-    static final String consonants = "qwrtpsdfghklzxcvbnm";
-    static final int maxLength = 30;
+    final String consonants = "qwrtpsdfghklzxcvbnm";
+    final int maxLength = 30;
+    MyScanner scanner = new MyScanner();
 
-    public static Set<String> readWords(String filename) throws FileNotFoundException{
+    public Set<String> readWords(String filename) throws FileNotFoundException{
         Set<String> words = new HashSet<String>();
-        Scanner scanner = new Scanner(new File(filename));
-        while (scanner.hasNext()) {
-            String line = scanner.nextLine();
+        List<String> lines = scanner.readWords(filename);
+        for (String line: lines) {
             words.addAll(findWordsInLine(line));
         }
-        scanner.close();
         return words;
     }
 
-    public static Set<String> findWordsInLine(String line) {
+    public Set<String> findWordsInLine(String line) {
         Set<String> res = new HashSet<String>();
         for (String word: line.split("\\W+")) {
             if (word.length() > maxLength) {
@@ -29,7 +28,7 @@ public class WordProcessor {
         return res;
     }
 
-    public static boolean hasDoubledConsonants(String word) {
+    public boolean hasDoubledConsonants(String word) {
         char prevLetter = ' ';
         for (char letter: word.toLowerCase().toCharArray()) {
             if (prevLetter == letter

@@ -1,0 +1,138 @@
+create table faculties (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
+);
+
+create table departments (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  faculty_id INT,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id),
+  constraint fk_faculty
+    foreign key(faculty_id)
+      references faculties(id) 
+);
+
+create table professors (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  department_id INT,
+  name VARCHAR(255) NOT NULL,
+  date_of_birth date,
+  title VARCHAR(255),
+  PRIMARY KEY(id),
+  constraint fk_department
+    foreign key(department_id)
+      references departments(id)
+);
+
+create table specialties (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(255) NOT NULL,
+  code INT,
+  PRIMARY KEY(id)
+);
+
+create table faculty_specialties (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  faculty_id INT NOT NULL,
+  specialty_id INT NOT NULL,
+  PRIMARY KEY(id),
+  constraint fk_faculty
+    foreign key(faculty_id)
+      references faculties(id),
+  constraint fk_specialty
+    foreign key(specialty_id)
+      references specialties(id)
+);
+
+create table education_plans (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  document TEXT,
+  PRIMARY KEY(id),
+);
+
+create table flows (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  faculty_specialty_id INT NOT NULL,
+  education_plan_id INT NOT NULL,
+  year INT NOT NULL,
+  PRIMARY KEY(id),
+  constraint fk_faculty_specialty
+    foreign key(faculty_specialty_id)
+      references faculty_specialties(id),
+  constraint fk_education_plan
+    foreign key(education_plan_id)
+      references education_plans(id)
+);
+
+create table groups (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  flow_id INT NOT NULL,
+  professor_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id),
+  constraint fk_flow
+    foreign key(flow_id)
+      references flows(id),
+  constraint fk_professor
+    foreign key(professor_id)
+      references professors(id)
+);
+
+create table students (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  group_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id),
+  constraint fk_group
+    foreign key(group_id)
+      references groups(id)
+);
+
+create table subject_plans (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  document TEXT,
+  PRIMARY KEY(id)
+);
+
+create table subjects (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  subject_plan_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id),
+  constraint fk_subject_plan
+    foreign key(subject_plan_id)
+      references subject_plans(id)
+);
+
+create table rooms (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(255) NOT NULL,
+  adress VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
+);
+
+create table lesons (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  group_id INT NOT NULL,
+  professor_id INT NOT NULL,
+  subject_id INT NOT NULL,
+  room_id INT NOT NULL,
+  day VARCHAR(255) NOT NULL,
+  pair INT NOT NULL,
+  typr VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id),
+  constraint fk_group
+    foreign key(group_id)
+      references groups(id),
+  constraint fk_professor
+    foreign key(professor_id)
+      references professors(id),
+  constraint fk_subject
+    foreign key(subject_id)
+      references subjects(id),
+  constraint fk_room
+    foreign key(room_id)
+      references rooms(id)
+);

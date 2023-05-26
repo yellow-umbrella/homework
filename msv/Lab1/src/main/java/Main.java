@@ -15,7 +15,8 @@ public class Main {
     }
 
     public static List<String> processFile(String file) throws FileNotFoundException {
-        Set<String> words = WordProcessor.readWords(file);
+        WordProcessor wordProcessor = new WordProcessor();
+        Set<String> words = wordProcessor.readWords(file);
         ArrayList<String> res = new ArrayList<>(words);
         Collections.sort(res);
         return res;

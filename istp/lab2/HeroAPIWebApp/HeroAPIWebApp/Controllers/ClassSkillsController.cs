@@ -28,6 +28,7 @@ namespace HeroAPIWebApp.Controllers
           {
               return NotFound();
           }
+          var res = _context.ClassSkills.OrderBy(c => _context.Companions.Where(r => r.Id == c.Id).Average(s => s.Rating)).
             return await _context.ClassSkills.ToListAsync();
         }
 

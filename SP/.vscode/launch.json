@@ -1,0 +1,58 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Lab4",
+            "request": "launch",
+            "mainClass": "Lab4.Lab4",
+            "projectName": "SP_9b7744e6"
+        },
+        {
+            "type": "java",
+            "name": "Launch Lab3",
+            "request": "launch",
+            "mainClass": "Lab3.Lab3",
+            "projectName": "SP_9b7744e6"
+        },
+        {
+            "type": "java",
+            "name": "Launch Test",
+            "request": "launch",
+            "mainClass": "Test",
+            "projectName": "SP_9b7744e6"
+        },
+        {
+            "type": "java",
+            "name": "Launch Lab2",
+            "request": "launch",
+            "mainClass": "Lab2.Lab2",
+            "projectName": "SP_9b7744e6"
+        },
+        {
+            "type": "java",
+            "name": "Launch Lab2",
+            "request": "launch",
+            "mainClass": "Lab2",
+            "projectName": "SP_9b7744e6"
+        },
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}",
+            "args": "Harry_Potter_Sorcerer's_Stone.txt"
+        },
+        {
+            "type": "java",
+            "name": "Launch Lab1",
+            "request": "launch",
+            "mainClass": "Lab1",
+            "projectName": "SP_40d8fe6f",
+            "args": "Harry_Potter_Sorcerer's_Stone.txt"
+        }
+    ]
+}
