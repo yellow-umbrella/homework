@@ -41,9 +41,11 @@ function setup() {
 }
 
 function test() {
+  graph.points.push(new Point(100, 200));
   graph.points.push(new Point(100, 100));
-  graph.points.push(new Point(200, 200));
-  graph.points.push(new Point(500, 200));
+  graph.points.push(new Point(100, 300));
+  graph.points.push(new Point(100, 150));
+  graph.points.push(new Point(200, 100));
 
 }
 
@@ -68,6 +70,10 @@ function mousePressed() {
 
 function buttonTriangulateClicked() {
   graph.execute();
+  console.log("ребра");
+  console.log(graph.triangulation);
+  console.log("точки");
+  console.log(graph.points);
   draw_sketch();
 }
 
@@ -130,7 +136,7 @@ class Graph {
     })
     stroke(255)
     for (let i = 0; i < this.points.length; i++) {
-      circle(this.points[i].x, this.points[i].y, 1)
+      circle(this.points[i].x, this.points[i].y, 1);
     }
   }
 }
@@ -171,9 +177,8 @@ class Delaunay {
       return [];
     }
 
-    points = points.sort((a,b) => a.x - b.x);
+    points = points.sort((a,b) => {if (a.x != b.x) return a.x - b.x; else return a.y - b.y});
     this.triangulate(points);
-    //console.log(this.edges);
     return this.edges;
   }
 
