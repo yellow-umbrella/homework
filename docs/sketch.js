@@ -29,32 +29,41 @@ function setup() {
   inputN.attribute('max', str(maxN));
   inputN.attribute('value', '100');
   inputN.position(maxX + 10, 210);
-  inputN.input(inputNewN);
 
   resultText = createP('');
   resultText.position(maxX + 10, 40);
   nText = createP('');
   nText.position(maxX + 10, 10);
 
-  draw_sketch()
+  noLoop();
+  //test();
+  draw_sketch();
+}
+
+function test() {
+  graph.points.push(new Point(100, 100));
+  graph.points.push(new Point(200, 200));
+  graph.points.push(new Point(500, 200));
+
 }
 
 function draw_sketch() {
   background(0);
+  strokeWeight(1);
   graph.render();
+  strokeWeight(2);
+  stroke(255,0,0);
+  line(0,0,0,maxY);
+  line(0,0.5,maxX,0.5);
+  line(maxX,maxY,0,maxY);
+  line(maxX,maxY,maxX,0);
 }
 
 function mousePressed() {
-  if (mouseX < maxX && mouseY < maxY) {
+  if (mouseX < maxX && mouseY < maxY && mouseX > 0 && mouseY > 0) {
     graph.points.push(new Point(mouseX, mouseY));
     draw_sketch()
   }
-}
-
-function inputNewN() {
-  let n = min(max(0, int(inputN.value())), maxN);
-  inputN.attribute('value', str(n));
-  console.log(inputN.value());
 }
 
 function buttonTriangulateClicked() {
@@ -83,6 +92,10 @@ class Graph {
   constructor() {
     this.points = [];
     this.triangulation = [];
+    this.addBoundary();
+  }
+
+  addBoundary() {
     this.points.push(new Point(0, 0));
     this.points.push(new Point(0, maxY));
     this.points.push(new Point(maxX, 0));
@@ -106,10 +119,7 @@ class Graph {
   reset() {
     this.points = [];
     this.triangulation = [];
-    this.points.push(new Point(0, 0));
-    this.points.push(new Point(0, maxY));
-    this.points.push(new Point(maxX, 0));
-    this.points.push(new Point(maxX, maxY));
+    this.addBoundary();
   }
 
   render() {
@@ -119,7 +129,7 @@ class Graph {
         edge.end.x, edge.end.y);
     })
     stroke(255)
-    for (let i = 1; i < this.points.length; i++) {
+    for (let i = 0; i < this.points.length; i++) {
       circle(this.points[i].x, this.points[i].y, 1)
     }
   }
